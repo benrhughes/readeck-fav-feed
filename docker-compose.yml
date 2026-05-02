@@ -1,0 +1,41 @@
+services:
+  readeck-feed:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      # Required
+      READECK_TOKEN: ${READECK_TOKEN:-your-api-token-here}
+      
+      # Optional (defaults shown)
+      READECK_URL: ${READECK_URL:-http://localhost:8000/api}
+      PORT: ${PORT:-3000}
+      CACHE_TTL_SECONDS: ${CACHE_TTL_SECONDS:-300}
+      FEED_TITLE: ${FEED_TITLE:-My Readeck Favourites}
+      FEED_DESCRIPTION: ${FEED_DESCRIPTION:-A feed of my bookmarked articles from Readeck}
+      FEED_LINK: ${FEED_LINK:-https://readeck.local}
+    
+    # DNS - use Tailscale's magic DNS for hostname resolution
+    dns:
+      - 100.100.100.100
+      - 8.8.8.8
+    
+    # Restart policy
+    restart: unless-stopped
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    
+    # Logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
