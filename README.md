@@ -1,5 +1,5 @@
 # Readeck Favorites Atom Feed Generator
-[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)]
+![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)
 
 Generate an Atom feed from your [Readeck](https://codeberg.org/readeck/readeck) favorited bookmarks.
 
